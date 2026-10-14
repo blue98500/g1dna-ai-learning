@@ -1,0 +1,38 @@
+[
+  {
+    "name": "해운대 까페",
+    "area": 120,
+    "budget": 80000000,
+    "status": "construction"
+  },
+  {
+    "name": "서면 스튜디오",
+    "area": 45,
+    "budget": 32000000,
+    "status": "done"
+  },
+  {
+    "name": "전포 베이커리",
+    "area": 60,
+    "budget": 45000000,
+    "status": "design"
+  },
+  {
+    "name": "남포동 서점",
+    "area": 50,
+    "budget": 28000000,
+    "status": "design"
+  },
+  {
+    "name": "도로시 미용실",
+    "area": 330,
+    "budget": 12000000,
+    "status": "design"
+  },
+  {
+    "name": "광안리 펍",
+    "area": 80,
+    "budget": 60000000,
+    "status": "design"
+  }
+]
