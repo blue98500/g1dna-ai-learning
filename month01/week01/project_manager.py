@@ -1,5 +1,18 @@
 # G1DNA 프로젝트 관리 프로그램 v1
 import json
+def ask_area():
+    while True:
+        text = input("면적(m²): ")
+        try:
+            area = float(text)
+        except ValueError:
+            print(" → 숫자만 입력하세요. 예 : 18.5")
+            continue
+        if area <= 0:
+            print(" → 0보다 큰 숫자를 입력하세요.")
+            continue
+        return area
+    
 def add_project(projects, name, area, budget):
     """새 프로젝트를 추가하고 리스트를 돌려준다"""
     projects.append({"name":name, "area": area, "budget":budget, "status": "design"})
@@ -44,7 +57,7 @@ while True:
 
     elif menu == "2":
         name = input("현장 이름: ")
-        area = int(input("면적(m2): "))
+        area = ask_area()
         budget = int(input("예산(원): "))
         projects=add_project(projects,name,area,budget)
 
