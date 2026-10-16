@@ -12,6 +12,30 @@ def ask_area():
             print(" → 0보다 큰 숫자를 입력하세요.")
             continue
         return area
+
+def ask_budget():
+    while True:
+        text = input("예산(원): ")
+        try:
+            budget = int(text)
+        except ValueError:
+            print(" → 정수만 입력하세요. 예 : 2000000")
+            continue
+        if budget <= 0:
+            print("→ 0보다 큰 숫자를 입력하세요.")
+            continue
+        return budget
+
+def ask_name():
+    while True:
+        text = input("현장명: ")
+        name = text.strip()
+        if name =="":
+            print("→ 현장명이 비었습니다 확인 후 다시 입력하세요")
+            continue
+        return name
+
+
     
 def add_project(projects, name, area, budget):
     """새 프로젝트를 추가하고 리스트를 돌려준다"""
@@ -24,7 +48,7 @@ def find_project(projects, keyword):
 def show_projects(projects):
     번호 = 1
     for p in projects:
-        print(번호, p["name"], p["status"])
+        print(번호, p["name"],p["area"],p["budget"], p["status"])
         번호 = 번호 +1
 def delete_project(projects, name):
     남길것 =[]
@@ -56,9 +80,9 @@ while True:
         show_projects(projects)
 
     elif menu == "2":
-        name = input("현장 이름: ")
+        name = ask_name()
         area = ask_area()
-        budget = int(input("예산(원): "))
+        budget = ask_budget()
         projects=add_project(projects,name,area,budget)
 
     elif menu =="3":
