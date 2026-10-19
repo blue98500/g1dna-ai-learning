@@ -68,12 +68,37 @@ def load_projects():
     except FileNotFoundError:
         return[]
 
+def update_projects(projects):
+    show_projects(projects)
+    no = int(input("현장 번호 선택 : "))
+    target = projects[no -1]
+
+    print("1)현장명 2)면적 3)예산 4) 진행상황")
+    choice = input("무엇을 고칠까요?: ")
+
+    if choice== "1":
+        target["name"]=ask_name()
+    elif choice=="2":
+        target["area"]=ask_area()
+    elif choice== "3":
+        target["budget"]=ask_budget()
+    elif choice=="4":
+        target["status"]=input("진행상황: ").strip()
+    else:
+        print(" →1~4중에서 고르세요.")
+        return
+    
+    save_projects(projects)
+    print("수정 완료 →",target)
+
+
+
 #====== 메뉴 실행 ====== 
 projects = load_projects()
 
 while True:
     print("\n=== G1DNA 프로젝트 관리 ===")
-    print("1.목록  2.추가  3.검색  4.삭제  0.종료")
+    print("1.목록  2.추가  3.검색  4.삭제  5.수정 0.종료")
     menu = input("번호 선택: ")
 
     if menu == "1":
@@ -99,6 +124,10 @@ while True:
         print("저장하고 종료합니다.")
         break
 
+    elif menu =="5":
+        update_projects(projects)
+
+    
     else:
         print("없는 번호입니다.")
     
