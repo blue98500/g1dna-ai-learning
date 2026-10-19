@@ -70,9 +70,21 @@ def load_projects():
 
 def update_projects(projects):
     show_projects(projects)
-    no = int(input("현장 번호 선택 : "))
-    target = projects[no -1]
+    while True:
+        try :
+            no = int(input("현장 번호 선택 (0:취소): "))
+        except ValueError:
+            print("→ 번호를 숫자로 입력하세요.")
+            continue
+        if no== 0:
+            print("취소했습니다.")
+            return
+        if 1<=no<=len(projects):
+            break
+        print(f"→ 1 ~ {len(projects)}사이로 입력하세요.")
 
+    target = projects[no -1]
+    
     print("1)현장명 2)면적 3)예산 4) 진행상황")
     choice = input("무엇을 고칠까요?: ")
 
