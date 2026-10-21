@@ -1,5 +1,9 @@
 # G1DNA 프로젝트 관리 프로그램 v1
 import json
+from pathlib import Path
+
+BASE_DIR = Path(__file__).parent
+DATA_FILE = BASE_DIR / "projects.json"
 def ask_area():
     while True:
         text = input("면적(m²): ")
@@ -58,15 +62,16 @@ def delete_project(projects, name):
     return 남길것
 
 def save_projects(projects):
-    with open("projects.json", "w", encoding="utf-8") as f:
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
         json.dump(projects, f, ensure_ascii=False, indent=2)
 
 def load_projects():
     try:
-        with open("projects.json", encoding="utf-8") as f:
+        with open(DATA_FILE, encoding="utf-8") as f:
             return json.load(f)
     except FileNotFoundError:
-        return[]
+        print("→ 저장 파일이 없어 빈 목록으로 시작합니다:", DATA_FILE)
+        return []
 
 def update_projects(projects):
     show_projects(projects)
@@ -76,7 +81,7 @@ def update_projects(projects):
         except ValueError:
             print("→ 번호를 숫자로 입력하세요.")
             continue
-        if no== 0:
+        if no== 10:
             print("취소했습니다.")
             return
         if 1<=no<=len(projects):
