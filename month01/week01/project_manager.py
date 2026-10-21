@@ -4,6 +4,25 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / "projects.json"
+
+class Project:
+    def __init__(self, name, area, budget):
+        self.name = name
+        self.area = area
+        self.budget = budget
+        self.status = "design"
+
+    def summary(self):
+        return f"{self.name} / {self.area}m² / {self.budget:,}원 / {self.status}"
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "area": self.area,
+            "budget": self.budget,
+            "status": self.status,
+        }
+    
 def ask_area():
     while True:
         text = input("면적(m²): ")
@@ -43,8 +62,11 @@ def ask_name():
     
 def add_project(projects, name, area, budget):
     """새 프로젝트를 추가하고 리스트를 돌려준다"""
-    projects.append({"name":name, "area": area, "budget":budget, "status": "design"})
+    p = Project(name,area,budget)
+    print("등록:",p.summary())
+    projects.append(p.to_dict())
     return projects
+
 
 def find_project(projects, keyword):
     """이름에 keyword가 포함된 프로젝트 목록을 돌려준다"""
