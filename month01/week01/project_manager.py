@@ -149,6 +149,24 @@ def export_csv(projects):
         writer.writerows(projects)
     print("→ 내보냄: ", CSV_FILE)
 
+def by_budget(p):
+    return p["budget"]
+
+def by_area(p):
+    return p["area"]
+
+def show_sorted(projects):
+    print("1)예산순 2)면적순")
+    choice = input("정렬 기준: ")
+    if choice =="1":
+        for p in sorted(projects, key = by_budget, reverse=True):
+            print(p["name"], f'{p["budget"]:,}원')
+    elif choice == "2":
+        for p in sorted(projects, key = by_area, reverse=True):
+            print(p["name"], f'{p["area"]}m²')
+    else:
+        print("→ 1 또는 2를 고르세요")
+
 
 
 #====== 메뉴 실행 ====== 
@@ -156,7 +174,7 @@ projects = load_projects()
 
 while True:
     print("\n=== G1DNA 프로젝트 관리 ===")
-    print("1.목록  2.추가  3.검색  4.삭제  5.수정 6.진행상황별 7.CSV 내보내기 0.종료")
+    print("1.목록  2.추가  3.검색  4.삭제  5.수정 6.진행상황별 7.CSV 내보내기 8.정렬 0.종료")
     menu = input("번호 선택: ")
 
     if menu == "1":
@@ -191,6 +209,8 @@ while True:
     elif menu =="7":
         export_csv(projects)
 
+    elif menu =="8":
+        show_sorted(projects)
     
     else:
         print("없는 번호입니다.")
