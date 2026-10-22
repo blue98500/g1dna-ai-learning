@@ -1,9 +1,11 @@
 # G1DNA 프로젝트 관리 프로그램 v1
 import json
+import csv
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / "projects.json"
+CSV_FILE = BASE_DIR / "projects.csv"
 
 class Project:
     def __init__(self, name, area, budget):
@@ -130,6 +132,23 @@ def update_projects(projects):
     save_projects(projects)
     print("수정 완료 →",target)
 
+def show_by_status(projects):
+    status = input("볼 진행상황 (design / construction / done): ").strip()
+    count = 0
+    for p in projects:
+        if p["status"] == status :
+            print(p["name"], p["area"], p["budget"])
+            count = count + 1
+    if count == 0:
+        print("→ 해당 현장이 없습니다.")
+
+def export_csv(projects):
+    with open(CSV_FILE, "w", newline="", encoding="utf-8-sig") as f:
+        writer = csv.DictWriter(f, fieldnames=["name", "area", "budget", "status"])
+        writer.writeheader()
+        writer.writerows(projects)
+    print("→ 내보냄: ", CSV_FILE)
+
 
 
 #====== 메뉴 실행 ====== 
@@ -137,7 +156,7 @@ projects = load_projects()
 
 while True:
     print("\n=== G1DNA 프로젝트 관리 ===")
-    print("1.목록  2.추가  3.검색  4.삭제  5.수정 0.종료")
+    print("1.목록  2.추가  3.검색  4.삭제  5.수정 6.진행상황별 7.CSV 내보내기 0.종료")
     menu = input("번호 선택: ")
 
     if menu == "1":
@@ -165,6 +184,12 @@ while True:
 
     elif menu =="5":
         update_projects(projects)
+
+    elif menu =="6":
+        show_by_status(projects)
+
+    elif menu =="7":
+        export_csv(projects)
 
     
     else:
