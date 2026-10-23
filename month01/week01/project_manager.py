@@ -1,11 +1,14 @@
 # G1DNA 프로젝트 관리 프로그램 v1
 import json
 import csv
+from openpyxl import Workbook
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
 DATA_FILE = BASE_DIR / "projects.json"
 CSV_FILE = BASE_DIR / "projects.csv"
+XLSX_FILE = BASE_DIR / "projects.xlsx"
+
 
 class Project:
     def __init__(self, name, area, budget):
@@ -167,6 +170,20 @@ def show_sorted(projects):
     else:
         print("→ 1 또는 2를 고르세요")
 
+def export_excel(projects):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "현장목록"
+    ws.append(["현장명", "면적(m²)", "예산(원)", "진행상황"])
+    for p in projects:
+        ws.append([p["name"],p["area"], p["budget"], p["status"]])
+    try:
+        wb.save(XLSX_FILE)
+        print("→ 내보냄:", XLSX_FILE)
+    except PermissionError:
+        print("→ 엑셀에서 파일이 열려 있습니다. 닫고 다시 하세요.")
+
+
 
 
 #====== 메뉴 실행 ====== 
@@ -174,7 +191,7 @@ projects = load_projects()
 
 while True:
     print("\n=== G1DNA 프로젝트 관리 ===")
-    print("1.목록  2.추가  3.검색  4.삭제  5.수정 6.진행상황별 7.CSV 내보내기 8.정렬 0.종료")
+    print("1.목록  2.추가  3.검색  4.삭제  5.수정 6.진행상황별 7.CSV 내보내기 8.정렬 9.Excel 0.종료")
     menu = input("번호 선택: ")
 
     if menu == "1":
@@ -211,6 +228,10 @@ while True:
 
     elif menu =="8":
         show_sorted(projects)
+
+    elif menu =="9":
+        export_excel(projects)
+    
     
     else:
         print("없는 번호입니다.")
