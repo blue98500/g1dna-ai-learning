@@ -183,7 +183,13 @@ def export_excel(projects):
     except PermissionError:
         print("→ 엑셀에서 파일이 열려 있습니다. 닫고 다시 하세요.")
 
-
+def show_menu():
+    print()
+    print("===== 현장 관리 =====")
+    print("[보기]     1.목록   3.검색   6.진행상황별   8.정렬")
+    print("[편집]     2.추가   4.삭제   5.수정")
+    print("[내보내기]  7.CSV   9.Excel")
+    print("0.종료")
 
 
 #====== 메뉴 실행 ====== 
@@ -191,7 +197,7 @@ projects = load_projects()
 
 while True:
     print("\n=== G1DNA 프로젝트 관리 ===")
-    print("1.목록  2.추가  3.검색  4.삭제  5.수정 6.진행상황별 7.CSV 내보내기 8.정렬 9.Excel 0.종료")
+    show_menu()
     menu = input("번호 선택: ")
 
     if menu == "1":
