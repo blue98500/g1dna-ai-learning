@@ -5,6 +5,7 @@ from openpyxl import Workbook
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
+STATUS_LIST = ["design", "construction", "done"]
 DATA_FILE = BASE_DIR / "projects.json"
 CSV_FILE = BASE_DIR / "projects.csv"
 XLSX_FILE = BASE_DIR / "projects.xlsx"
@@ -127,7 +128,7 @@ def update_projects(projects):
     elif choice== "3":
         target["budget"]=ask_budget()
     elif choice=="4":
-        target["status"]=input("진행상황: ").strip()
+        target["status"]=ask_status()
     else:
         print(" →1~4중에서 고르세요.")
         return
@@ -136,7 +137,7 @@ def update_projects(projects):
     print("수정 완료 →",target)
 
 def show_by_status(projects):
-    status = input("볼 진행상황 (design / construction / done): ").strip()
+    status = ask_status()
     count = 0
     for p in projects:
         if p["status"] == status :
@@ -191,6 +192,12 @@ def show_menu():
     print("[내보내기]  7.CSV   9.Excel")
     print("0.종료")
 
+def ask_status():
+    while True:
+        text = input("진행상황 (design / construction / done): ").strip().lower()
+        if text in STATUS_LIST:
+            return text
+        print("→ design / construction / done 중에서 입력하세요.")
 
 #====== 메뉴 실행 ====== 
 projects = load_projects()
