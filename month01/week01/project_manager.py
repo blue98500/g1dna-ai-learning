@@ -178,6 +178,23 @@ def export_excel(projects):
     ws.append(["현장명", "면적(m²)", "예산(원)", "진행상황"])
     for p in projects:
         ws.append([p["name"],p["area"], p["budget"], p["status"]])
+
+    #1) 합계 줄
+    last_row = len(projects)+1
+    ws.append(["합계", "", f"=SUM(C2:C{last_row})", ""])
+
+    #2) 열 너비
+    ws.column_dimensions["A"].width =24
+    ws.column_dimensions["B"].width =16
+    ws.column_dimensions["C"].width =16
+    ws.column_dimensions["D"].width =14
+
+    #3) 예산 쉽표 서식
+    for row in range(2, last_row +2):
+        ws[f"C{row}"].number_format = "#,##0"
+
+        
+
     try:
         wb.save(XLSX_FILE)
         print("→ 내보냄:", XLSX_FILE)
