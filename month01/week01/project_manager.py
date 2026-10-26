@@ -1,10 +1,18 @@
 # G1DNA 프로젝트 관리 프로그램 v1
 import json
+import os
+from dotenv import load_dotenv
 import csv
 from openpyxl import Workbook
 from pathlib import Path
 
 BASE_DIR = Path(__file__).parent
+load_dotenv(BASE_DIR/".env")
+#---확인용 (확인 후 지울줄 )---
+key = os.getenv("OPENAI_API_KEY")
+print("키 앞 5글자:", key[:5])
+print("틀린 이름으로 찾으면:", os.getenv("OPENAI_KEY"))
+#----------------------------
 STATUS_LIST = ["design", "construction", "done"]
 DATA_FILE = BASE_DIR / "projects.json"
 CSV_FILE = BASE_DIR / "projects.csv"
@@ -193,7 +201,7 @@ def export_excel(projects):
     for row in range(2, last_row +2):
         ws[f"C{row}"].number_format = "#,##0"
 
-        
+
 
     try:
         wb.save(XLSX_FILE)
