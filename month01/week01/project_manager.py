@@ -1,18 +1,16 @@
 # G1DNA 프로젝트 관리 프로그램 v1
 import json
+from openai import OpenAI
 import os
 from dotenv import load_dotenv
 import csv
 from openpyxl import Workbook
 from pathlib import Path
-
+0
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR/".env")
-#---확인용 (확인 후 지울줄 )---
-key = os.getenv("OPENAI_API_KEY")
-print("키 앞 5글자:", key[:5])
-print("틀린 이름으로 찾으면:", os.getenv("OPENAI_KEY"))
-#----------------------------
+MODEL = "gpt-6.1-terra"
+client = OpenAI()
 STATUS_LIST = ["design", "construction", "done"]
 DATA_FILE = BASE_DIR / "projects.json"
 CSV_FILE = BASE_DIR / "projects.csv"
@@ -209,12 +207,23 @@ def export_excel(projects):
     except PermissionError:
         print("→ 엑셀에서 파일이 열려 있습니다. 닫고 다시 하세요.")
 
+def ai_summary(projects):
+    data = json.dumps(projects, ensure_ascii=False)
+    prompt =f"""다음은 인테리어 현장 목록(JSON)이다. 진행상황별 현장 수, 예산 합계, 소장이 주의 할 점을 5줄 이내로 요약해줘.{data}"""
+    print("→ AI에게 보내는 중...")
+    response = client.responses.create(model=MODEL, input= prompt)
+    print(response.output_text)
+   
+    
+
+
 def show_menu():
     print()
     print("===== 현장 관리 =====")
     print("[보기]     1.목록   3.검색   6.진행상황별   8.정렬")
     print("[편집]     2.추가   4.삭제   5.수정")
     print("[내보내기]  7.CSV   9.Excel")
+    print("[AI]       10.현장 요약")
     print("0.종료")
 
 def ask_status():
@@ -269,6 +278,9 @@ while True:
 
     elif menu =="9":
         export_excel(projects)
+
+    elif menu =="10":
+        ai_summary(projects)
     
     
     else:
