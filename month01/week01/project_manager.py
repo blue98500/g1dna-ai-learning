@@ -10,6 +10,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR/".env")
 MODEL = "gpt-6.1-terra"
+INSTRUCTIONS = """너는 인테리어 현장 소장의 비서다.
+-아래 현장 목록에 있는 정보로만 답한다.
+-목록에 없는 내용은 '목록에 없습니다'라고 답한다.
+-금액은 원 단위로 쉼표를 넣는다.
+-3줄 이내로 답한다. """
 client = OpenAI()
 STATUS_LIST = ["design", "construction", "done"]
 DATA_FILE = BASE_DIR / "projects.json"
@@ -213,6 +218,19 @@ def ai_summary(projects):
     print("→ AI에게 보내는 중...")
     response = client.responses.create(model=MODEL, input= prompt)
     print(response.output_text)
+
+def ask_ai(projects):
+    question = input("질문: ").strip()
+    if question == "":
+        return
+    data = json.dumps(projects, ensure_ascii=False)
+    response = client.responses.create(
+        model=MODEL,
+        instructions=INSTRUCTIONS,
+        input=f"현장목록 : \n{data}\n\n질문: {question}",
+    )
+    print(response.output_text)
+
    
     
 
@@ -223,7 +241,7 @@ def show_menu():
     print("[보기]     1.목록   3.검색   6.진행상황별   8.정렬")
     print("[편집]     2.추가   4.삭제   5.수정")
     print("[내보내기]  7.CSV   9.Excel")
-    print("[AI]       10.현장 요약")
+    print("[AI]       10.현장 요약  11.질문하기")
     print("0.종료")
 
 def ask_status():
@@ -281,7 +299,9 @@ while True:
 
     elif menu =="10":
         ai_summary(projects)
-    
+
+    elif menu =="11":
+        ask_ai(projects)
     
     else:
         print("없는 번호입니다.")
