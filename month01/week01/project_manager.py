@@ -1,4 +1,5 @@
 # G1DNA 프로젝트 관리 프로그램 v1
+import openai
 import json
 from openai import OpenAI
 import os
@@ -15,7 +16,12 @@ INSTRUCTIONS = """너는 인테리어 현장 소장의 비서다.
 -목록에 없는 내용은 '목록에 없습니다'라고 답한다.
 -금액은 원 단위로 쉼표를 넣는다.
 -3줄 이내로 답한다. """
-client = OpenAI()
+try:
+    client = OpenAI()
+except openai.OpenAIError:
+    client = None
+    print("→ API 키가 없어 AI 메뉴는 꺼둡니다. (.env 확인)")
+
 STATUS_LIST = ["design", "construction", "done"]
 DATA_FILE = BASE_DIR / "projects.json"
 CSV_FILE = BASE_DIR / "projects.csv"
@@ -212,25 +218,38 @@ def export_excel(projects):
     except PermissionError:
         print("→ 엑셀에서 파일이 열려 있습니다. 닫고 다시 하세요.")
 
+def call_ai(instructions, text):
+    if client is None:
+        return None
+    try:
+        response = client.responses.create(
+            model=MODEL, instructions=instructions, input=text,
+        )
+        return response.output_text
+    except openai.AuthenticationError:
+        print("→ API 키가 맞지 않습니다. .env를 확인하세요.")
+    except openai.APIConnectionError:
+        print("→ 인터넷 연결을 확인하세요.")
+    except openai.RateLimitError:
+        print("→ 요청이 너무 많거나 크레딧이 부족 합니다. 잠시 후 다시.")
+    return None
+
 def ai_summary(projects):
     data = json.dumps(projects, ensure_ascii=False)
     prompt =f"""다음은 인테리어 현장 목록(JSON)이다. 진행상황별 현장 수, 예산 합계, 소장이 주의 할 점을 5줄 이내로 요약해줘.{data}"""
     print("→ AI에게 보내는 중...")
-    response = client.responses.create(model=MODEL, input= prompt)
-    print(response.output_text)
-
+    answer = call_ai("너는 인테리어 현장 소장의비서다.", prompt)
+    if answer is not None:
+        print(answer)
+        
 def ask_ai(projects):
     question = input("질문: ").strip()
     if question == "":
         return
     data = json.dumps(projects, ensure_ascii=False)
-    response = client.responses.create(
-        model=MODEL,
-        instructions=INSTRUCTIONS,
-        input=f"현장목록 : \n{data}\n\n질문: {question}",
-    )
-    print(response.output_text)
-
+    answer = call_ai(INSTRUCTIONS, f"현장목록 : \n{data}\n\n질문 : {question}")
+    if answer is not None:
+        print(answer)
    
     
 
