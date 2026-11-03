@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import csv
 from openpyxl import Workbook
 from pathlib import Path
-0
+
 BASE_DIR = Path(__file__).parent
 load_dotenv(BASE_DIR/".env")
 MODEL = "gpt-6.1-terra"
@@ -232,6 +232,10 @@ def call_ai(instructions, text):
         print("→ 인터넷 연결을 확인하세요.")
     except openai.RateLimitError:
         print("→ 요청이 너무 많거나 크레딧이 부족 합니다. 잠시 후 다시.")
+    except openai.BadRequestError as e:
+        print("→ 요청서 양식이 잘못됐습니다.", e.message)
+    except openai.APIStatusError as e:
+        print(f"→ AI 요청이 반려됐습니다 (코드 {e.status_code}):{e.message}")
     return None
 
 def ai_summary(projects):
