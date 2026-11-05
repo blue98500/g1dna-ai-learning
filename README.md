@@ -9,6 +9,7 @@
 | M1·W2 | 함수 정리 + 입력 검증 | project_manager v2 |
 | M1·W3 | 경로 고정 · 클래스 · 내보내기 | project_manager v3 |
 | M1·W4 | LLM API 첫 연결 | **AI Project Manager v4** |
+| M2·W1 | REST API·JSON 심화 | rest_practice.py + call_ai 보강 |
 
 ## 실행 방법 (v4 기준)
 ```
@@ -26,12 +27,11 @@ python project_manager.py
 - 진행상황은 design · construction · done만 입력 가능
 - 엑셀 내보내기: 열 너비, 예산 쉼표, 합계 줄 자동
 - 10. AI 현장 요약 / 11. AI에게 질문하기 (OpenAI API)
-- 키 오류·인터넷 끊김·키 없음에도 프로그램이 멈추지 않음
+- 키 오류·인터넷 끊김·키 없음 **요청 형식 오류(W5 보강)**에도 프로그램이 멈추지 않음
 
 ### 알려진 한계
 - AI 숫자 계산은 틀릴 수 있음 → 합계는 엑셀 공식으로 확인
 - 현장 목록 전체를 AI에 보내므로 현장이 많아지면 비용 증가
-- 예상하지 못한 API 오류(예: 요청 형식 오류)는 아직 처리 안 됨
 - `ai_test.py`는 연습용 파일
 
 ## v3 (M1·W3)
@@ -50,3 +50,10 @@ python project_manager.py
 - 변수는 작업대위의 자재, 파일은 창고
 - ()=실행버튼, 이름만쓰면 공구를 가리키기만 하고, ()를 붙여야 공구가 사용된다.
 - 받을 상자 = 공구이름(재료)
+
+## REST 실습 (M2·W1)
+SDK 없이 `requests`로 직접 요청서를 보내 보는 연습 파일. `month02/week01/rest_practice.py`
+- GET: GitHub 저장소 정보·최근 커밋 조회 (중첩 JSON 꺼내기)
+- POST: OpenAI에 직접 요청 → 답·토큰·비용 해석
+- 상태 코드(도장)를 먼저 확인하고 나서 내용을 꺼낸다
+- API 키는 `month01/week01/.env`를 그대로 사용한다 (금고는 하나)
