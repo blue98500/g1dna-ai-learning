@@ -48,4 +48,18 @@ r = requests.post(
     timeout=30,
 )
 print("도장:", r.status_code)
-print(r.json())
+IN_PRICE = 1      # gpt-6.1-terra, 입력 100만 토큰당 $
+OUT_PRICE = 5     # 출력
+
+if r.status_code != 200:
+    print("반려:", r.status_code, r.json()["error"]["message"])
+else:
+    data = r.json()
+    for item in data["output"]:
+        if item["type"] == "message":
+            print("답:", item["content"][0]["text"])
+    used_in = data["usage"]["input_tokens"]
+    used_out = data["usage"]["output_tokens"]
+    cost = (used_in * IN_PRICE + used_out * OUT_PRICE) / 1_000_000
+    print(f"보낸 물량: {used_in} / 받은 물량: {used_out}")
+    print(f"비용: ${cost:.6f}")
