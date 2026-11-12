@@ -3,6 +3,7 @@ import asyncio
 import httpx
 
 URL = "https://api.open-meteo.com/v1/forecast"
+DAILY = "precipitation_probability_max"
 
 import time
 
@@ -18,7 +19,7 @@ for name, (lat, lon) in SITES.items():
     params = {
         "latitude" : lat,
         "longitude" : lon,
-        "daily" : "precipitation_probability_max",
+        "daily" : DAILY,
         "timezone" : "Asia/Seoul",
         "forecast_days" : 2,
     }
@@ -27,7 +28,7 @@ for name, (lat, lon) in SITES.items():
     if r.status_code !=200:
         print(name, "반려: ", r.status_code)
         continue
-    rain = r.json()["daily"]["precipitation_probability_max"][1]
+    rain = r.json()["daily"][DAILY][1]
     print(f"{name} 내일 강수 확률: {rain}%")
 
 print(f"걸린시간 : {time.perf_counter() - start:.2f}초")
@@ -37,7 +38,7 @@ async def get_rain(client, name):
     params = {
         "latitude" : lat,
         "longitude" : lon,
-        "daily" : "precipitation_probability_max",
+        "daily" : DAILY,
         "timezone" : "Asia/Seoul",
         "forecast_days" : 2
     }
@@ -45,7 +46,16 @@ async def get_rain(client, name):
   
     if r.status_code != 200:
         return name, None
-    return name, r.json()["daily"]["precipitation_probability_max"][1]
+    return name, r.json()["daily"][DAILY][1]
+
+def advice(rain):
+    if rain is None:
+        return "? 조회 실패 - 직접 확인"
+    if rain  >= 70:
+        return "! 외부 작업, 도장 주의"
+    if rain  >= 40:
+        return "△ 우산, 보양 준비"
+    return "✓ 작업 가능"
 
 async def main():
     start = time.perf_counter()
@@ -56,8 +66,13 @@ async def main():
             get_rain(client, "서면"),
             get_rain(client, "기장"),
         )
+    print("===내일 현장 날씨 브리핑 ===")
     for name, rain in results:
-        print(f"{name} 내일 강수확률 : {rain}%")
+        if rain is None:
+            print(f"{name}: ? {advice(rain)}")
+        else:
+            print(f"{name}: {rain}% {advice(rain)}")
+
     print(f"동시에 : {time.perf_counter() - start:.2f}초")
 
 asyncio.run(main())
