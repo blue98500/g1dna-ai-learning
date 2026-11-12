@@ -10,6 +10,7 @@
 | M1·W3 | 경로 고정 · 클래스 · 내보내기 | project_manager v3 |
 | M1·W4 | LLM API 첫 연결 | **AI Project Manager v4** |
 | M2·W1 | REST API·JSON 심화 | rest_practice.py + call_ai 보강 |
+| M2·W2 | async 기초 + API 프로젝트 | 현장 날씨 브리핑 |
 
 ## 실행 방법 (v4 기준)
 ```
@@ -57,3 +58,21 @@ SDK 없이 `requests`로 직접 요청서를 보내 보는 연습 파일. `month
 - POST: OpenAI에 직접 요청 → 답·토큰·비용 해석
 - 상태 코드(도장)를 먼저 확인하고 나서 내용을 꺼낸다
 - API 키는 `month01/week01/.env`를 그대로 사용한다 (금고는 하나)
+
+## 현장 날씨 브리핑 (M2·W2)
+
+현장 여러 곳의 내일 강수확률을 **동시에** 받아서, 외부 작업·도장 주의 안내를 붙여 줍니다.
+
+- 실행: `python month02/week02/weather_brief.py`
+- 날씨 정보: Open-Meteo 공개 API (키 필요 없음)
+- 좌표: 구 단위 대표 좌표만 사용 (실제 현장 주소·고객명은 넣지 않음)
+- 비교: 차례로 묻기(requests) 약 2.3초 → 동시에 묻기(httpx + asyncio.gather) 약 0.9초
+
+| 내일 강수확률 | 안내 |
+|---|---|
+| 70% 이상 | ⚠️ 외부 작업·도장 주의 |
+| 40~69% | △ 우산·보양 준비 |
+| 39% 이하 | ✅ 작업 가능 |
+| 조회 실패 | ❓ 직접 확인 (한 곳이 실패해도 나머지는 계속 출력) |
+
+연습 파일: `month02/week02/async_practice.py` (asyncio.sleep으로 동시 실행 연습)
