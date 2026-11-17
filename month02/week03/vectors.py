@@ -43,3 +43,19 @@ base = CARDS["작은 카페"]
 for name, card in CARDS.items():
     print(f"작은 카페 - {name}: {distance_n(base, card):.1f}")
 
+def dot(a, b):
+    total = 0
+    for i in range(len(a)):
+        total = total + a[i] * b[i]
+    return total
+
+def norm(a):
+    return math.sqrt(dot(a, a))
+
+def cosine(a, b):
+    return dot(a, b) / (norm(a) * norm(b))
+
+for name, card in CARDS.items():
+    print(f"작은 카페 - {name}: 거리 {distance_n(base, card):5.1f} / 방향 {cosine(base, card):.3f}")
+
+
