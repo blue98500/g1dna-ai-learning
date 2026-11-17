@@ -26,4 +26,20 @@ print(f"해운대-서면 : {distanc(SITES['해운대'], SITES['서면']):.3f}")
 print(f"해운대-기장 : {distanc(SITES['해운대'], SITES['기장']):.3f}")
 print(f"서면-기장 : {distanc(SITES['서면'], SITES['기장']):.3f}")
 
+CARDS = {
+    "작은 카페": [15, 45, 20],
+    "큰 카페": [30, 90, 40],
+    "사무실": [40, 60, 25],
+    "미용실": [12, 40,18],
+}
+
+def distance_n(a,b):
+    total = 0
+    for i in range(len(a)):
+        total = total + (b[i] - a[i]) ** 2
+    return math.sqrt(total)
+
+base = CARDS["작은 카페"]
+for name, card in CARDS.items():
+    print(f"작은 카페 - {name}: {distance_n(base, card):.1f}")
 
