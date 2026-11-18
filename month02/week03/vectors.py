@@ -58,4 +58,14 @@ def cosine(a, b):
 for name, card in CARDS.items():
     print(f"작은 카페 - {name}: 거리 {distance_n(base, card):5.1f} / 방향 {cosine(base, card):.3f}")
 
+names = list(CARDS.keys())
+matrix = list(CARDS.values())
+
+print("         "+"  ".join(f"{n:>6}" for n in names))
+for i in range(len(matrix)):
+    row = ""
+    for j in range(len(matrix)):
+        row = row + f"{cosine(matrix[i], matrix[j]):8.2f}"
+    print(f"{names[i]:>6}"+ row)
+
 
