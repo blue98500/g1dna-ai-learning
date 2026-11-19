@@ -11,6 +11,7 @@
 | M1·W4 | LLM API 첫 연결 | **AI Project Manager v4** |
 | M2·W1 | REST API·JSON 심화 | rest_practice.py + call_ai 보강 |
 | M2·W2 | async 기초 + API 프로젝트 | 현장 날씨 브리핑 |
+| M2·W3 | 수학 압축 ① 벡터·행렬·임베딩 | 수학·ML 설명 노트 |
 
 ## 실행 방법 (v4 기준)
 ```
@@ -76,3 +77,10 @@ SDK 없이 `requests`로 직접 요청서를 보내 보는 연습 파일. `month
 | 조회 실패 | ❓ 직접 확인 (한 곳이 실패해도 나머지는 계속 출력) |
 
 연습 파일: `month02/week02/async_practice.py` (asyncio.sleep으로 동시 실행 연습)
+
+## 수학 노트 (M2·W3)
+
+- 노트: `month02/week03/math_notes.md` (그림 3장)
+- 실행: `python month02/week03/vectors.py` · `python month02/week03/embed_search.py`
+- `embed_search.py`는 OpenAI 임베딩 API를 쓰며, W5와 같은 `.env` 금고가 필요합니다
+- 숫자와 현장 메모는 모두 연습용입니다
