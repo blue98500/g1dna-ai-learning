@@ -43,4 +43,22 @@ for i in range(len(MEMOS)):
     for j in range(i+1, len(MEMOS)):
         print(f"{cosine(vectors[i],vectors[j]):.3f} {MEMOS[i]} ⇿ {MEMOS[j]}")
 
+QUESTION = "카페 바닥 다시 깔기"
+
+q = client.embeddings.create(model=EMBED_MODEL, input=[QUESTION])
+q_vec = q.data[0].embedding
+
+scores = []
+for i in range(len(MEMOS)):
+    scores.append((cosine(q_vec, vectors[i]), MEMOS[i]))
+
+def by_score(item):
+    return item[0]
+
+print(f"질문: {QUESTION}")
+for score, memo in sorted(scores, key=by_score, reverse=True)[:2]:
+    print(f"    {score:.3f} {memo}")
+
+
+
 
